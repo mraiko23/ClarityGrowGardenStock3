@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: grow-a-garden-stock-tracker
+    env: node
+    buildCommand: |
+      npm install
+      mkdir -p /opt/render/.cache/puppeteer
+      npx puppeteer browsers install chrome
+      CHROME_PATH="$(npx puppeteer browsers resolve chrome --executable-path)"
+      CHROME_DIR="$(dirname "$CHROME_PATH")"
+      echo "export PATH=\"$CHROME_DIR:\$PATH\"" >> $RENDER_SHELL_FILE
+    startCommand: node server.js
+    envVars:
+      - key: PORT
+        value: 3000
+      - key: PUPPETEER_CACHE_DIR
+        value: /opt/render/.cache/puppeteer
